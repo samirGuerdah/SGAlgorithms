@@ -1,7 +1,17 @@
 
-struct  PushdownStack<Element> {
+protocol Stack {
+    
+    typealias Element
+    
+    func push(item: Element)
+    func pop() -> Element?
+    func isEmpty() -> Bool
+    func size() -> Int
+}
+
+struct  PushdownStack<Element> : CollectionType, CustomStringConvertible, ArrayLiteralConvertible {
 	
-	private var items = [Element]()
+    private var items = [Element]()
 	
 	mutating func push(item: Element){
 		items.append(item)
@@ -11,53 +21,43 @@ struct  PushdownStack<Element> {
 		if size() == 0 {return nil}
 		return items.removeLast()
 	}
-	
-	func isEmpty() -> Bool {
-		return items.count == 0
-	}
-	
+
 	func size() -> Int {
 		return items.count
 	}
+    
+    // ColelctionType
+    var startIndex : Int { return 0 }
+    var endIndex : Int { return items.count }
+    
+    subscript(idx: Int) -> Element {
+        return items[idx]
+    }
+    
+    // ArrayLiteralConvertible
+    init(arrayLiteral elements: Element...){
+        items = elements
+    }
+    
+    // CustomStringConvertible
+    var description: String { return "Stack items : \(items)" }
 }
 
+// PushdownStack example usage
+var pushdownStack : PushdownStack = [1, 2, 5]
+pushdownStack.pop()
+pushdownStack.push(9)
 
 
-class Node <Item> {
-	
-	var item: Item
-	var next: Node?
-	
-	init(item : Item, next: Node?){
-		self.item = item
-		self.next = next
-	}
-}
 
 
-struct PushdownStackLinkedList<T> {
-	
-	var first : Node<T>?
-	var n = 0 // Number of elements
-	
-	mutating func push(item: T) {
-		n++
-		let newFirst = Node<T>.init(item: item, next: first)
-		first = newFirst
-	}
-	
-	mutating func pop() -> T? {
-		if n != 0 { n-- }
-		let firstNode = first
-		first = first?.next
-		return firstNode?.item
-	}
-	
-	func isEmpty() -> Bool {
-		return n == 0
-	}
-	
-	func size() -> Int {
-		return n;
-	}
-}
+
+
+
+
+
+
+
+
+
+
